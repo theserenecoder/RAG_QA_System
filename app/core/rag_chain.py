@@ -87,6 +87,15 @@ class RAGChain:
             f"retrieval_k: {settings.retrieval_k}"
         )
         
+    @property
+    def evaluator(self):
+        """Get or create RAGAS evaluator instance"""
+        if self._evaluator is None:
+            from app.core.ragas_evaluator import RAGASEvaluator
+            
+            self._evaluator = RAGASEvaluator()
+        return self._evaluator
+        
     def query(self,question: str) ->str:
         """Execute a RAG query
 
@@ -160,6 +169,7 @@ class RAGChain:
             answer = await self.chain.ainvoke(question)
             logger.info("Query processed successfully")
             return answer
+        
         except Exception as e:
             logger.error(f"Error processing query: {e}")
             raise
@@ -200,6 +210,55 @@ class RAGChain:
             logger.error(f"Error processing query with source: {e}")
             raise
         
+        
+    async def aquery_with_evaluation(self, question: str, included_sources: bool = True) -> dict:
+        """Execute async RAG query wityh RAGAD evaluation
+
+        Args:
+            question (str): user question
+            included_sources (bool, optional): Weather to include sources in response
+
+        Returns:
+            Dictionary with answer, sources and evaluation scores
+        """
+        logger.info(f"Processing query with evalution: {question[:100]}...")
+        
+        try:
+            ## Get answer with source
+            result = await self.aquery_with_sources(question)
+            answer = result["answer"]
+            sources = result["sources"]
+            
+            ## preparing context for evaluation
+            contexts = [source["content"] for source in sources]
+            
+            ## Run evaluation
+            try:
+                evaluation = await self._evaluator.aevaluate(question, answer, contexts)     
+                
+                logger.info(
+                    f"Evaluation completed - "
+                    f"faithfulness= {evaluation.get("faithfulness","N/A")}, "
+                    f"answer_relevancy= {evaluation.get("answer_relevancy","N/A")}"
+                )        
+            
+            except Exception as e:
+                logger.warning(f"Evaluation failed: {e}", exc_info=True)
+                evaluation = {
+                    
+                    "faithfulness": None,
+                    "answer_relevancy": None,
+                    "evaluation_time_ms": None,
+                    "error": str(e)
+                
+                }
+                
+            return {"answer": answer, "sources": sources, "evaluation": evaluation}
+            
+        except Exception as e:
+            logger.error(f"Error in query with evaluation: {e}")
+            raise
+            
         
     def stream(self, question: str):
         """Stream RAG response.
