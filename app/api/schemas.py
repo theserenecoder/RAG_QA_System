@@ -111,3 +111,21 @@ class QueryResponse(BaseModel):
     sources: list[SourceDocument] | None = Field(None, description="Source document used")
     processing_time_ms: float = Field(..., description="Query processing time in milisecond")
     evaluation: EvaluationScores | None = Field(..., description="RAGAS evaluation scores (if requested)")
+    
+    
+#================ Error Schema =======================
+
+class ErrorResponse(BaseModel):
+    """Error Response"""
+    
+    error: str = Field(..., description="Error type")
+    message: str = Field(..., description="Error message")
+    details: str | None = Field(None, description="Detailed error information")
+    
+    
+class ValidationErrorReponse(BaseModel):
+    """Validation Error Response"""
+    
+    error: str = Field(default="Validation error", description="Error type")
+    message: str = Field(..., description="Error message")
+    errors: list[dict] = Field(..., description="Validation errors")
