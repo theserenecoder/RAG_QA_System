@@ -31,7 +31,7 @@ async def health_check() ->HealthResponse:
     
 @router.get(
     "/ready",
-    response_model=ReadinessResponse
+    response_model=ReadinessResponse,
     summary="Readiness check",
     description="Check if service is ready to handle the request",
 )
