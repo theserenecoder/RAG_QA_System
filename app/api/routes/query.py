@@ -65,9 +65,10 @@ async def query(request: QueryRequest) ->QueryResponse:
             
         elif request.include_sources:
             result = await rag_chain.aquery_with_sources(question=request.question)
+            answer = result["answer"]
             sources = (
                 [
-                    SourceDocument(content=sources["content"], metadata=sources["metadata"])
+                    SourceDocument(content=source["content"], metadata=source["metadata"])
                     for source in result["sources"]
                 ]
             )

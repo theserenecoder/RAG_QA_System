@@ -186,7 +186,7 @@ class RAGChain:
         try:
             answer = await self.chain.ainvoke(question)
         
-            source_docs = await self.retriever.ainvoke(question)
+            source_docs = self.retriever.invoke(question)
             
             sources = [
                 {

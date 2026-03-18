@@ -39,7 +39,7 @@ class DocumentProcessor:
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size = self.chunk_size,
             chunk_overlap = self.chunk_overlap,
-            seperators = ["\n\n","\n",".",","]
+            separators = ["\n\n","\n",".",","]
         )
         
         logger.info(

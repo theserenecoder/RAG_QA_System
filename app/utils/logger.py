@@ -22,7 +22,7 @@ def setup_logging(log_level: str = "INFO") ->None:
     root_logger.setLevel(getattr(logging,log_level.upper(),logging.INFO))
     
     ## remove existing handlers
-    for handler in root_logger.handler[:]:
+    for handler in root_logger.handlers[:]:
         root_logger.removeHandler()
         
     ## consol handler

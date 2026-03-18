@@ -54,7 +54,7 @@ async def readiness_check() -> ReadinessResponse:
         collection_info = vector_store.get_collection_info()
         
         return ReadinessResponse(
-            status = is_healthy,
+            status = "ready",
             qdrant_connected=True,
             collection_info=collection_info,
         )

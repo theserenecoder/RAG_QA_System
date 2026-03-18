@@ -207,7 +207,7 @@ class VectorStoreService:
             True if healthy, False otherwise
         """
         try:
-            self.client.get_collection()
+            self.client.get_collections()
             return True
         except Exception as e:
             logger.error(f"Vectore store health check failed: {e}")

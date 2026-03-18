@@ -18,7 +18,7 @@ class ReadinessResponse(BaseModel):
     """Rediness check response."""
     
     status: str = Field(..., description="Service status")
-    qdrant_connected: str = Field(..., description="Qdrant connection status")
+    qdrant_connected: bool = Field(..., description="Qdrant connection status")
     collection_info: dict = Field(..., description="Collection information")
     
     

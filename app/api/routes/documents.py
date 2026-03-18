@@ -112,7 +112,7 @@ async def get_collection_info() -> DocumentListResponse:
 
 @router.delete(
     "/collection",
-    response={
+    responses={
         200: {"description": "Collection deleted successfully"},
         500: {"model": ErrorResponse, "description": "Deletion error"},
     },

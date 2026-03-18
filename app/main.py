@@ -38,20 +38,20 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.app_name,
     description="""
-    ## RAG Q&A System API
+## RAG Q&A System API
 
-    A Retrieval-Augmented Generation (RAG) question-answering system built with:
-    - **FastAPI** for the API layer
-    - **LangChain** for RAG orchestration
-    - **Qdrant Cloud** for vector storage
-    - **OpenAI** for embeddings and LLM
+A Retrieval-Augmented Generation (RAG) question-answering system built with:
+- **FastAPI** for the API layer
+- **LangChain** for RAG orchestration
+- **Qdrant Cloud** for vector storage
+- **OpenAI** for embeddings and LLM
 
-    ### Features
-    - Upload PDF, TXT, and CSV documents
-    - Ask questions and get AI-powered answers
-    - View source documents for transparency
-    - Streaming responses for real-time feedback
-    """,
+### Features
+- Upload PDF, TXT, and CSV documents
+- Ask questions and get AI-powered answers
+- View source documents for transparency
+- Streaming responses for real-time feedback
+""",
     
     version=__version__,
     docs_url="/docs",
