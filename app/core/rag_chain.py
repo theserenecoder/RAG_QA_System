@@ -12,6 +12,7 @@ from app.config import get_settings
 from app.core.embeddings import get_embeddings
 from app.utils.logger import get_logger
 from app.core.vector_store import VectorStoreService
+from app.core.ragas_evaluator import RAGASEvaluator
 
 logger = get_logger(__name__)
 settings  = get_settings()
@@ -91,9 +92,9 @@ class RAGChain:
     def evaluator(self):
         """Get or create RAGAS evaluator instance"""
         if self._evaluator is None:
-            from app.core.ragas_evaluator import RAGASEvaluator
-            
             self._evaluator = RAGASEvaluator()
+            
+        logger.info("Evaluator initialized")
         return self._evaluator
         
     def query(self,question: str) ->str:
@@ -231,10 +232,11 @@ class RAGChain:
             
             ## preparing context for evaluation
             contexts = [source["content"] for source in sources]
+            logger.info(f"Found {len(contexts)} sources for context")
             
             ## Run evaluation
             try:
-                evaluation = await self._evaluator.aevaluate(question, answer, contexts)     
+                evaluation = await self.evaluator.aevaluate(question, answer, contexts)     
                 
                 logger.info(
                     f"Evaluation completed - "

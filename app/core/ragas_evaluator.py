@@ -125,18 +125,18 @@ class RAGASEvaluator:
         Returns:
             Dataset object for RAGAS evaluation
         """
-        
+
         data = {
             "question": [question],
             "answer": [answer],
-            "context": [contexts], #List of lists
+            "contexts": [contexts], #List of lists
         }
         
         logger.debug(f"Prepared dataset with {len(contexts)} contexts for question: {question[:50]}")
         
         return Dataset.from_dict(data)
         
-    def _evaluate_with_timeout(self, dataset: Dataset) ->dict[str,Any]:
+    def _evaluate_with_timeout(self, dataset: Dataset) ->dict[str, Any]:
         """Execute RAGAS evaluation with timeout.
 
         Args:
@@ -152,13 +152,14 @@ class RAGASEvaluator:
         # For now, we rely on the async wrapper and trust RAGAS to complete
         # In production, consider using signal.alarm or threading.Timer
         
+        
         result = evaluate(
             dataset,
             metrics= self.metrics,
             llm= self.eval_llm,
             embeddings= self.eval_embedding,
         )
-        
+   
         ## conver the result to dectionary
         return result.to_pandas().to_dict("records")[0]
     
